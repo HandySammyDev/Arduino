@@ -1,24 +1,32 @@
+// Define Pins​
 // Define Pins
 #define BLUE 6
 #define GREEN 5
 #define RED 3
-int drink1LED = 2;
-int failLED = 12;
-int buttonMoney = 7;
-int buttonDrink1 = 8;
 
+//LEDs
+const int redLED = 12;
+const int blueLED = 10;
+const int yellowLED = 9;
+const int greenLED = 2;
+const int whiteLED = 11;
 
-void setup()
-{
-pinMode(RED, OUTPUT);
-pinMode(GREEN, OUTPUT);
-pinMode(BLUE, OUTPUT);
-pinMode(drink1LED, OUTPUT);
-digitalWrite(RED, LOW);
-digitalWrite(GREEN, HIGH);
-digitalWrite(BLUE, HIGH);
-pinMode(buttonMoney, INPUT_PULLUP);
-pinMode(buttonDrink1, INPUT_PULLUP) ;
+//Buttons
+const int buttonMoney = 7;
+const int buttonDrink1 = 8;
+const int buttonDrink2 = 4;
+
+void setup(){
+  pinMode(RED, OUTPUT);
+  pinMode(GREEN, OUTPUT);
+  pinMode(BLUE, OUTPUT);
+  pinMode(greenLED, OUTPUT);
+  digitalWrite(RED, LOW);
+  digitalWrite(GREEN, HIGH);
+  digitalWrite(BLUE, HIGH);
+  pinMode(buttonMoney, INPUT_PULLUP);
+  pinMode(buttonDrink1, INPUT_PULLUP);
+  pinMode(buttonDrink2, INPUT_PULLUP);
 }
 
 // define variables
@@ -27,75 +35,126 @@ int greenValue = HIGH;
 int blueValue = HIGH;
 
 // main loop
-void loop()
-{
-  if(redValue == LOW && greenValue == HIGH && blueValue == HIGH)
-  {
-    if ((digitalRead(buttonMoney) == LOW))
-   {
-     digitalWrite(RED, HIGH);
-     digitalWrite(GREEN, HIGH);
-     digitalWrite(BLUE, LOW);
-     delay(500);
-     redValue =  HIGH;
-     greenValue = HIGH;
-     blueValue = LOW;
-
-   }
-
+void loop(){
+  if(isCyan()){
+    if (moneyButtonPressed()){
+      activateYellowLED();
+     }
   }
 
-  if(redValue == HIGH && greenValue == HIGH && blueValue == LOW)
-  {
-    if ((digitalRead(buttonMoney) == LOW))
-   {
-     digitalWrite(RED, HIGH);
-     digitalWrite(GREEN, LOW);
-     digitalWrite(BLUE, HIGH);
-     delay(500);
-     redValue =  HIGH;
-     greenValue = LOW;
-     blueValue = HIGH;
-   }
+  if(isYellow()){
+    if (moneyButtonPressed()){
+      activateMagentaLED();
+    }
   }
 
-  if(redValue == HIGH && greenValue == LOW && blueValue == HIGH)
-  {
-    if ((digitalRead(buttonMoney) == LOW))
-   {
-     digitalWrite(failLED, HIGH);
-     delay(500);
-     digitalWrite(failLED, LOW);
-   }
+  if(isMagenta()){
+    if (moneyButtonPressed()){
+      flashRedLED();
+    }
   }
 
-//Cyan and yellow fail to buy
-  if((redValue == LOW && greenValue == HIGH && blueValue == HIGH) ||
-  (redValue == HIGH && greenValue == HIGH && blueValue == LOW))
-  {
-    if ((digitalRead(buttonDrink1) == LOW))
-   {
-     digitalWrite(failLED, HIGH);
-     delay(500);
-     digitalWrite(failLED, LOW);
-   }
+  //fail to buy
+  if(isCyan() || isYellow()){
+    if (drink1_ButtonPressed() || drink2_ButtonPressed()){
+      flashRedLED();
+    }
   }
 
-  if(redValue == HIGH && greenValue == LOW && blueValue == HIGH)
-  {
-    if ((digitalRead(buttonDrink1) == LOW))
-   {
-     digitalWrite(RED, LOW);
-     digitalWrite(GREEN, HIGH);
-     digitalWrite(BLUE, HIGH);
-     delay(500);
-     redValue =  LOW;
-     greenValue = HIGH;
-     blueValue = HIGH;
+  if(isMagenta()){
+    if (drink1_ButtonPressed()){
 
-     digitalWrite(drink1LED, HIGH);
-     delay(500);
-     digitalWrite(drink1LED, LOW);
+      activateCyanLED();
+      flashYellowThenBlueLED();
    }
+
+   if(drink2_ButtonPressed()){
+
+      flashWhiteThenBlueLED();
+      activateCyanLED();
+    }  
   }
+}
+
+void activateCyanLED(){
+  digitalWrite(RED, LOW);
+  digitalWrite(GREEN, HIGH);
+  digitalWrite(BLUE, HIGH);
+  delay(500);
+  
+  redValue =  LOW;
+  greenValue = HIGH;
+  blueValue = HIGH;
+}
+
+void activateMagentaLED(){
+  digitalWrite(RED, HIGH);
+  digitalWrite(GREEN, LOW);
+  digitalWrite(BLUE, HIGH);
+  delay(500);
+
+  redValue =  HIGH;
+  greenValue = LOW;
+  blueValue = HIGH;
+}
+
+void activateYellowLED(){
+  digitalWrite(RED, HIGH);
+  digitalWrite(GREEN, HIGH);
+  digitalWrite(BLUE, LOW);
+  delay(500);
+
+  redValue =  HIGH;
+  greenValue = HIGH;
+  blueValue = LOW;
+}
+
+void flashRedLED(){
+  digitalWrite(redLED, HIGH);
+  delay(500);
+  digitalWrite(redLED, LOW);
+}
+
+void flashYellowThenBlueLED(){
+  digitalWrite(yellowLED, HIGH);
+  delay(500);
+  digitalWrite(yellowLED, LOW);
+  delay(500);
+  digitalWrite(blueLED, HIGH);
+  delay(500);
+  digitalWrite(blueLED, LOW);
+}
+
+void flashWhiteThenBlueLED(){
+  digitalWrite(whiteLED, HIGH);
+  delay(500);
+  digitalWrite(whiteLED, LOW);
+  delay(500);
+  digitalWrite(blueLED, HIGH);
+  delay(500);
+  digitalWrite(blueLED, LOW);
+}
+
+bool isCyan(){
+  return redValue == LOW && greenValue == HIGH && blueValue == HIGH;
+}
+
+bool isYellow(){
+  return redValue == HIGH && greenValue == HIGH && blueValue == LOW;
+}
+
+bool isMagenta(){
+  return redValue == HIGH && greenValue == LOW && blueValue == HIGH;
+}
+
+bool moneyButtonPressed(){
+  return digitalRead(buttonMoney) == LOW;
+}
+
+bool drink1_ButtonPressed(){
+  return digitalRead(buttonDrink1) == LOW;
+}
+
+bool drink2_ButtonPressed(){
+  return digitalRead(buttonDrink2) == LOW;
 }
