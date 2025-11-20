@@ -52,6 +52,16 @@ void loop(){
     if (money_ButtonPressed()){
       flashRedLED();
     }
+    else if(drink1_ButtonPressed()){
+      activateCyanRGB();
+      flashYellowLED();
+      flashBlueLED();
+    }
+    else if(drink2_ButtonPressed()){
+      flashWhiteLED();
+      flashBlueLED();
+      activateCyanRGB();
+    }
   }
 
   //fail to buy
@@ -59,20 +69,6 @@ void loop(){
     if (drink1_ButtonPressed() || drink2_ButtonPressed()){
       flashRedLED();
     }
-  }
-
-  if(isMagentaRGB()){
-    if (drink1_ButtonPressed()){
-      activateCyanRGB();
-      flashYellowLED();
-      flashBlueLED();
-   }
-
-   if(drink2_ButtonPressed()){
-      flashWhiteLED();
-      flashBlueLED();
-      activateCyanRGB();
-    }  
   }
 }
 
