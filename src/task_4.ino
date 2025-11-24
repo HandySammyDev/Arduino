@@ -5,16 +5,16 @@
 #define RED 3
 
 //LEDs
-const int redLED = 12;
-const int blueLED = 10;
-const int yellowLED = 9;
+const int redLED = 4;
+const int blueLED = 7;
+const int yellowLED = 8;
 const int greenLED = 2;
-const int whiteLED = 11;
+const int whiteLED = 9;
 
 //Buttons
-const int buttonMoney = 7;
-const int buttonDrink1 = 8;
-const int buttonDrink2 = 4;
+const int buttonMoney = 12;
+const int buttonDrink1 = 11;
+const int buttonDrink2 = 10;
 
 void setup(){
   pinMode(RED, OUTPUT);
@@ -50,12 +50,12 @@ void loop(){
 
   if(isMagentaRGB()){
     if (money_ButtonPressed()){
-      flashRedLED();
+      flashGreenLED();
     }
     else if(drink1_ButtonPressed()){
-      activateCyanRGB();
       flashYellowLED();
       flashBlueLED();
+      activateCyanRGB();
     }
     else if(drink2_ButtonPressed()){
       flashWhiteLED();
@@ -109,6 +109,13 @@ void flashRedLED(){
   digitalWrite(redLED, HIGH);
   delay(500);
   digitalWrite(redLED, LOW);
+}
+
+void flashGreenLED(){
+  digitalWrite(greenLED, HIGH);
+  delay(500);
+  digitalWrite(greenLED, LOW);
+  delay(500);
 }
 
 void flashYellowLED(){
